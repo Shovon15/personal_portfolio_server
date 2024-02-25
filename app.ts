@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { clientOrigin } from "./secret";
 import userRouter from "./routes/userRoutes";
 import { ErrorHandler } from "./utils/error";
+import projectRouter from "./routes/projectRoutes";
 
 export const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 //routes
 app.use("/api/v1", userRouter);
+app.use("/api/v1/project", projectRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send({
