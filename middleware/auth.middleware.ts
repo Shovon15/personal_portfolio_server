@@ -11,27 +11,30 @@ interface CustomRequest extends Request {
 	user?: any; // Define the user property
 }
 export const isAuthenticated = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
-	const access_token = req.cookies.accessToken;
+	try {
+		const access_token = req.cookies.accessToken;
 
-	if (!access_token) {
-		return next(new CustomError(400, "Please login to access this resource."));
+		if (!access_token) {
+			return next(new CustomError(400, "Please login to access this resource."));
+		}
+
+		const decoded = jwt.verify(access_token, accessTokenSecret) as JwtPayload;
+
+		if (!decoded) {
+			return next(new CustomError(400, "Access token is not valid."));
+		}
+
+		const user = await UserModel.findById(decoded?.id).select("-refreshToken");
+
+		if (!user) {
+			return next(new CustomError(400, "User session not found in Redis. please login"));
+		}
+
+		req.user = user._id.toString();
+		req.cookies = access_token;
+
+		next();
+	} catch (error: any) {
+		throw new CustomError(400, error.message || "Access token is not valid.")
 	}
-
-	const decoded = jwt.verify(access_token, accessTokenSecret) as JwtPayload;
-
-	if (!decoded) {
-		return next(new CustomError(400, "Access token is not valid."));
-	}
-
-	const user = await UserModel.findById(decoded?.id).select("-refreshToken");
-
-	if (!user) {
-		return next(new CustomError(400, "User session not found in Redis. please login"));
-	}
-
-	req.user = user._id.toString();
-
-	req.cookies = access_token;
-
-	next();
 });

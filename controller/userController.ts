@@ -101,17 +101,16 @@ interface ILoginRequest {
 }
 export const userLogin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body as ILoginRequest;
-    console.log({ email, password })
 
-    if (!email && !password) {
-        throw new CustomError(400, "email and password is required")
-    }
+    // if (!email && !password) {
+    //     throw new CustomError(400, "email and password is required")
+    // }
 
     // Here is an alternative of above code based on logic discussed in video:
-    // if (!(username || email)) {
-    //     throw new ApiError(400, "username or email is required")
+    if (!(email || password)) {
+        throw new CustomError(400, "username or email is required")
 
-    // }
+    }
 
     const user = await UserModel.findOne({
         $or: [{ email }]

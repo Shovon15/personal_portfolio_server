@@ -11,7 +11,8 @@ export const app = express();
 // middleware--------------------
 app.use(express.json({ limit: "100mb" }));
 app.use(cors({
-    origin: clientOrigin,
+    // origin: clientOrigin,
+    origin: "*",
     credentials: true,
     
 }));
