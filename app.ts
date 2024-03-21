@@ -10,11 +10,12 @@ export const app = express();
 
 // middleware--------------------
 app.use(express.json({ limit: "100mb" }));
-app.use(cors({
-    origin: clientOrigin,
-    credentials: true,
+// app.use(cors({
+//     origin: clientOrigin,
+//     credentials: true,
     
-}));
+// }));
+app.use(cors());
 app.use(cookieParser());
 
 //routes
