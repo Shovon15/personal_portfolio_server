@@ -9,29 +9,31 @@ import { JwtPayload } from "jsonwebtoken";
 
 interface CustomRequest extends Request {
 	user?: any; // Define the user property
+	token?: string;
 }
 export const isAuthenticated = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
 	try {
-		const access_token = req.cookies.accessToken;
 
-		if (!access_token) {
-			return next(new CustomError(400, "Please login to access this resource."));
+		const token = req.headers.authorization;
+
+		if (!token) {
+			return next(new CustomError(401, "Please login to access this resource."));
 		}
 
-		const decoded = jwt.verify(access_token, accessTokenSecret) as JwtPayload;
+		const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
 
 		if (!decoded) {
-			return next(new CustomError(400, "Access token is not valid."));
+			return next(new CustomError(401, "Access token is not valid."));
 		}
 
 		const user = await UserModel.findById(decoded?.id).select("-refreshToken");
 
 		if (!user) {
-			return next(new CustomError(400, "User session not found in Redis. please login"));
+			return next(new CustomError(401, "User session not found. please login"));
 		}
 
 		req.user = user._id.toString();
-		req.cookies = access_token;
+		req.token = token;
 
 		next();
 	} catch (error: any) {

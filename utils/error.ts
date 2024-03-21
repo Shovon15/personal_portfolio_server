@@ -27,13 +27,13 @@ export const ErrorHandler = (
   // jwt token error
   if (err.name === "JsonWebTokenError") {
     const message = `Invalid token`;
-    err = new CustomError(400, message);
+    err = new CustomError(401, message);
   }
 
   // token expired error
   if (err.name === "TokenExpiredError") {
     const message = `Expired token, create a new one`;
-    err = new CustomError(400, message);
+    err = new CustomError(401, message);
   }
 
   res.status(err.statusCode).json({
