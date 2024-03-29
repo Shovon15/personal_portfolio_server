@@ -3,9 +3,10 @@ import { NextFunction, Request, Response } from "express";
 import CustomError from "../utils/errorHandler";
 import ResponseHandler from "../utils/responseHanlder";
 import UserModel from "../models/userModel";
-import { uploadOnCloudinary } from "../utils/cloudinary";
+
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { activationTokenSecret, refreshTokenSecret } from "../secret";
+import { uploadOnCloudinary } from "../utils/cloudinary";
 
 interface IActivationToken {
 	token: string;
@@ -261,6 +262,54 @@ export const userInfo = asyncHandler(async (req: CustomRequest, res: Response, n
 				user: userInfo,
 			},
 			"User info"
+		)
+	);
+});
+
+interface UpdateFields {
+	name?: string;
+	avatar?: {
+		url: string;
+	};
+}
+export const updateUser = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
+	
+	const userId = req.user;
+	const formData = req.body;
+
+	const updateFields: UpdateFields = {};
+
+	if (formData.name !== undefined) {
+		updateFields.name = formData.name;
+	}
+
+	try {
+		if (formData.image !== undefined && formData.image !== null) {
+			const imageFile = await uploadOnCloudinary(formData.image, "avatar", 400, 400);
+
+			if (imageFile !== null) {
+
+				updateFields.avatar = {
+					url: imageFile.url
+				};
+			}
+		}
+	} catch (error) {
+		throw new CustomError(404, `Error uploading image to Cloudinary: ${error}` );
+	}
+
+	const updatedData = await UserModel.findByIdAndUpdate(userId, { $set: updateFields }, { new: true });
+
+	if (!updatedData) {
+		throw new CustomError(404, "User not found.");
+	}
+
+	return res.status(200).json(
+		new ResponseHandler(
+			200,
+			{
+			},
+			"User update successfully"
 		)
 	);
 });

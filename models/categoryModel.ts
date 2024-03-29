@@ -4,6 +4,7 @@ import mongoose, { Schema, Document, model, models, Model } from 'mongoose';
 export interface ICategory extends Document {
     name: string;
     value: string;
+    isEnabled: boolean;
 }
 
 const categorySchema: Schema<ICategory> = new Schema({
@@ -18,6 +19,10 @@ const categorySchema: Schema<ICategory> = new Schema({
         lowercase: true,
         required: [true, 'value is required']
     },
+    isEnabled: {
+        type: Boolean,
+        default: false,
+    }
 
 }, { timestamps: true });
 

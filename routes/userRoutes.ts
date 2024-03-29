@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userRegister, userLogin, userLogout, userInfo, refreshAccessToken } from "../controller/userController";
+import { userRegister, userLogin, userLogout, userInfo, refreshAccessToken, updateUser } from "../controller/userController";
 import { upload } from "../middleware/multer.middleware";
 import { isAuthenticated } from "../middleware/auth.middleware";
 
@@ -21,6 +21,7 @@ userRouter.post("/refresh-access-token", refreshAccessToken);
 userRouter.get("/logout", isAuthenticated, userLogout);
 // userRouter.get("/user-info", isAuthenticated, userInfo);
 userRouter.get("/user-info", isAuthenticated, userInfo);
+userRouter.post("/update-user", isAuthenticated, updateUser);
 
 
 export default userRouter;

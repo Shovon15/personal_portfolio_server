@@ -4,22 +4,23 @@ import cookieParser from "cookie-parser";
 import { clientOrigin } from "./secret";
 import userRouter from "./routes/userRoutes";
 import { ErrorHandler } from "./utils/error";
-import projectRouter from "./routes/projectRoutes";
+import categoryRouter from "./routes/categoryRoutes";
+import projectRouter from "./routes/projectRouters";
 
 export const app = express();
 
 // middleware--------------------
 app.use(express.json({ limit: "100mb" }));
-// app.use(cors({
-//     origin: clientOrigin,
-//     credentials: true,
-    
-// }));
-app.use(cors());
+app.use(cors({
+    origin: clientOrigin,
+    credentials: true,
+}));
+// app.use(cors());
 app.use(cookieParser());
 
 //routes
 app.use("/api/v1", userRouter);
+app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/project", projectRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {

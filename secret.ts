@@ -7,7 +7,7 @@ const serverPort = process.env.PORT || 5001;
 const nodeEnv = process.env.NODE_ENV;
 
 
-// const clientOrigin = process.env.CLIENT_ORIGIN || "";
+// const clientOrigin = process.env.CLIENT_ORIGIN;
 const clientOrigin = "https://shovon-mahamud.vercel.app";
 const mongoDbUrl = process.env.MONGODB_URI as string;
 
