@@ -6,6 +6,7 @@ import userRouter from "./routes/userRoutes";
 import { ErrorHandler } from "./utils/error";
 import categoryRouter from "./routes/categoryRoutes";
 import projectRouter from "./routes/projectRouters";
+import contactRouter from "./routes/contactRoutes";
 
 export const app = express();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use("/api/v1", userRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/project", projectRouter);
+app.use("/api/v1/contact", contactRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send({

@@ -272,6 +272,7 @@ interface UpdateFields {
 		url: string;
 	};
 }
+
 export const updateUser = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
 	
 	const userId = req.user;
@@ -307,8 +308,7 @@ export const updateUser = asyncHandler(async (req: CustomRequest, res: Response,
 	return res.status(200).json(
 		new ResponseHandler(
 			200,
-			{
-			},
+			{},
 			"User update successfully"
 		)
 	);
