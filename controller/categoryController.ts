@@ -4,7 +4,7 @@ import ResponseHandler from "../utils/responseHanlder";
 import CategoryModel from "../models/categoryModel";
 import CustomError from "../utils/errorHandler";
 
-interface ICategory {
+export interface ICategory {
     name: string;
 }
 interface UpdateFields {
