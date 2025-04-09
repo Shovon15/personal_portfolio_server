@@ -88,7 +88,8 @@ userSchema.methods.generateAccessToken = function () {
         },
         accessTokenSecret,
         {
-            expiresIn: accessTokenExpireTime,
+            // expiresIn: accessTokenExpireTime,
+            expiresIn: '30d',
         }
     );
 };
@@ -101,7 +102,8 @@ userSchema.methods.generateRefreshToken = function () {
         },
         refreshTokenSecret,
         {
-            expiresIn: refreshTokenExpireTime,
+            // expiresIn: refreshTokenExpireTime,
+            expiresIn: '3d',
         }
     );
 }
