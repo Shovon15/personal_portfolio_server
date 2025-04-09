@@ -193,7 +193,9 @@ export const getProjectByCategory = asyncHandler(
     const projects = await ProjectModel.find(query);
 
     if (!projects || projects.length === 0) {
-      throw new CustomError(400, "No project data found");
+      return res
+        .status(200)
+        .json(new ResponseHandler(200, { data: [] }, "No project data found"));
     }
 
     return res
